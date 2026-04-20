@@ -26,7 +26,7 @@ class Pelicula(models.Model):
     descripcion = models.TextField(max_length=1000)
     estudio = models.ForeignKey(Estudio, on_delete=models.PROTECT)
     duracion = models.CharField(max_length=255)
-    generos = models.ManyToManyField(Genero, on_delete=models.PROTECT)
+    generos = models.ManyToManyField(Genero)
     imagen = models.ImageField(upload_to='peliculas/', null=True, blank=True)
     gross = models.CharField(max_length=255)
 
