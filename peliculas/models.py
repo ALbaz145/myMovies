@@ -44,7 +44,7 @@ class Persona(models.Model):
     nombre = models.CharField(max_length=255)
     fecha_nacimiento = models.DateField()
     pais = models.CharField(max_length=255)
-    imagen = models.ImageField(upload_to='peliculas/', null=True, blank=True)
+    imagen = models.ImageField(upload_to='peliculas/images', null=True, blank=True)
 
 class PeliculaPersona(models.Model):
     LISTADO_ROLES = [
