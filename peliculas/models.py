@@ -30,6 +30,12 @@ class Pelicula(models.Model):
     imagen = models.ImageField(upload_to='peliculas/', null=True, blank=True)
     gross = models.CharField(max_length=255)
 
+class Usuario(models.Model):
+    nombre_usuario = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=255)
+    reviews = models.ForeignKey('Review', on_delete=models.CASCADE, null=True, blank=True)
+
 class Review(models.Model):
     pelicula = models.OneToOneField(Pelicula, on_delete=models.CASCADE, primary_key=True)
     texto = models.TextField(max_length=1000)
