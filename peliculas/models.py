@@ -1,7 +1,7 @@
 from django.db import models
 
 class Estudio(models.Model):
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255, unique=True)
 
 class Genero(models.Model):
     LISTADO_GENEROS = [
@@ -33,3 +33,23 @@ class Pelicula(models.Model):
 class Review(models.Model):
     pelicula = models.OneToOneField(Pelicula, on_delete=models.CASCADE, primary_key=True)
     texto = models.TextField(max_length=1000)
+
+class Persona(models.Model):
+    nombre = models.CharField(max_length=255)
+    fecha_nacimiento = models.DateField()
+    pais = models.CharField(max_length=255)
+    imagen = models.ImageField(upload_to='peliculas/', null=True, blank=True)
+
+class PeliculaPersona(models.Model):
+    LISTADO_ROLES = [
+        ('ACT', 'Actor'),
+        ('DIR', 'Director'),
+        ('PRO', 'Productor'),
+        ('ESC', 'Escritor')
+    ]
+    pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    rol = models.CharField(max_length=50, choices=LISTADO_ROLES, default='ACT')
+
+
+
