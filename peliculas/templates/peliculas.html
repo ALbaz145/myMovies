@@ -1,10 +1,31 @@
-{% extends "base.html" %} {% block content %}
-<h1>Peliculas</h1>
-<ul>
-    {% for pelicula in peliculas %}
-    <li>
-        {{ pelicula.titulo }} - {{ pelicula.descripcion }}
-    </li>
-    {% endfor %}
-</ul>
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page">
+  <header class="page-header">
+    <h1>Películas</h1>
+    <p>Catálogo de películas disponibles.</p>
+  </header>
+
+  {% if peliculas %}
+    <div class="grid">
+      {% for p in peliculas %}
+        <article class="card">
+          <div class="card-body">
+            <h2 class="card-title">{{ p.titulo }}</h2>
+            {% if p.descripcion %}
+              <p class="card-text">{{ p.descripcion|truncatechars:140 }}</p>
+            {% endif %}
+          </div>
+
+          <div class="card-footer">
+            <a class="btn" href="#">Ver detalle</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty">No hay películas registradas.</p>
+  {% endif %}
+</section>
 {% endblock %}
