@@ -11,15 +11,31 @@
     <div class="grid">
       {% for p in peliculas %}
         <article class="card">
+          {% if p.imagen %}
+            <img class="card-img" src="{{ p.imagen.url }}" alt="{{ p.titulo }}">
+          {% else %}
+            <div class="card-img card-img--placeholder">Sin imagen</div>
+          {% endif %}
+
           <div class="card-body">
             <h2 class="card-title">{{ p.titulo }}</h2>
-            {% if p.descripcion %}
-              <p class="card-text">{{ p.descripcion|truncatechars:140 }}</p>
-            {% endif %}
+
+            <p class="card-meta">
+              {{ p.fecha_lanzamiento }} · {{ p.pais_origen }} · {{ p.duracion }}
+            </p>
+
+            <p class="card-meta">
+              Estudio: {{ p.estudio.nombre }}
+            </p>
+
+            <p class="card-text">
+              {{ p.descripcion|truncatechars:160 }}
+            </p>
           </div>
 
           <div class="card-footer">
-            <a class="btn" href="#">Ver detalle</a>
+            
+            <a class="btn" href="{% url 'pelicula_detalle' p.id %}">Ver detalle</a>
           </div>
         </article>
       {% endfor %}
