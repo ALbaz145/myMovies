@@ -20,10 +20,19 @@ class Genero(models.Model):
         ('MUS', 'Musical'),
         ('DEF', 'Default'),
     ]
-    nombre = models.CharField(max_length=3, choices=LISTADO_GENEROS, default='DEF')
+    nombre = models.CharField(max_length=3, choices=LISTADO_GENEROS, default='DEF', unique=True)
+    
+    def save(self, *args, **kwargs):
+        # Allow saves only during migrations
+        if not self.pk and Genero.objects.filter(nombre=self.nombre).exists():
+            return
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise Exception("Los géneros son fijos y no se pueden eliminar.")
     
     def __str__(self):
-            return self.nombre
+            return self.get_nombre_display()
 
 
 class Pelicula(models.Model):
