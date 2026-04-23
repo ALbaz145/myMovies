@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ persona.nombre }}</h1>
+
+  {% if participaciones %}
+    <ul>
+      {% for p in participaciones %}
+        <li>{{ p.pelicula.titulo }} ({{ p.get_rol_display }})</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No hay participaciones registradas.</p>
+  {% endif %}
+{% endblock %}

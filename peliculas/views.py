@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404
-from .models import Pelicula
+from .models import Pelicula, Persona
 
 # Create your views here.
 def base(request):
@@ -15,3 +15,19 @@ def peliculas(request):
 def pelicula_detalle(request, pelicula_id):
     pelicula = get_object_or_404(Pelicula, id=pelicula_id)
     return render(request, "pelicula_detalle.html", {"pelicula": pelicula})
+
+def persona_detalle(request, persona_id):
+    persona = get_object_or_404(Persona, id=persona_id)
+
+    participaciones = (
+        PeliculaPersona.objects
+        .select_related("pelicula")
+        .filter(persona=persona)
+        .order_by("pelicula__titulo")
+    )
+
+    return render(request, "persona_detalle.html", {
+        "persona": persona,
+        "participaciones": participaciones,
+    })
+
