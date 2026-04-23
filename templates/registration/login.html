@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar Sesión - MyMovies{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-6 py-20 flex justify-center items-center min-h-[70vh]">
+  <div class="w-full max-w-md">
+
+    <div class="text-center mb-10">
+      <h1 class="text-slate-400 mt-2 text-sm">Inicia sesión para continuar en <span class="text-neon font-semibold">MyMovies</span></h1>
+    </div>
+
+    <!-- Error messages -->
+    {% if form.errors %}
+    <div class="mb-6 px-4 py-3 rounded-xl border border-red-500/40 bg-red-500/10 text-red-400 text-sm text-center">
+      Tu usuario o contraseña no coinciden. Intenta de nuevo.
+    </div>
+    {% endif %}
+
+    {% if next %}
+      {% if user.is_authenticated %}
+      <div class="mb-6 px-4 py-3 rounded-xl border border-yellow-500/40 bg-yellow-500/10 text-yellow-400 text-sm text-center">
+        Tu cuenta no tiene acceso a esta página. Por favor inicia sesión con una cuenta que tenga acceso.
+      </div>
+      {% else %}
+      <div class="mb-6 px-4 py-3 rounded-xl border border-blue-500/40 bg-blue-500/10 text-blue-400 text-sm text-center">
+        Por favor inicia sesión para ver esta página.
+      </div>
+      {% endif %}
+    {% endif %}
+
+    <!-- Login Card -->
+    <div class="bg-slate-900/60 border border-slate-800 rounded-2xl p-8 backdrop-blur-sm shadow-2xl">
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        <!-- Username -->
+        <div class="mb-5">
+          <label for="{{ form.username.id_for_label }}" class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">
+            {{ form.username.label }}
+          </label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm">👤</span>
+            {{ form.username }}
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-8">
+          <label for="{{ form.password.id_for_label }}" class="block text-xs font-semibold uppercase tracking-widest text-slate-400 mb-2">
+            {{ form.password.label }}
+          </label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm">🔒</span>
+            {{ form.password }}
+          </div>
+        </div>
+
+        <input type="hidden" name="next" value="{{ next }}">
+
+        <!-- Submit -->
+        <button type="submit" class="btn-neon w-full text-center text-sm uppercase tracking-widest">
+          Iniciar Sesión
+        </button>
+      </form>
+    </div>
+
+    <!-- Forgot password -->
+    <p class="text-center mt-6 text-slate-500 text-sm">
+      ¿Olvidaste tu contraseña?
+      <a href="{% url 'password_reset' %}" class="text-neon hover:underline ml-1 font-semibold">Recupérala aquí</a>
+    </p>
+
+  </div>
+</div>
+
+<style>
+  /* Style Django form inputs to match the base theme */
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    background-color: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    color: white;
+    font-size: 0.875rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+  }
+
+  input[type="text"]:focus,
+  input[type="password"]:focus {
+    border-color: #00f2ff;
+    box-shadow: 0 0 0 3px rgba(0, 242, 255, 0.15);
+  }
+
+  input[type="text"]::placeholder,
+  input[type="password"]::placeholder {
+    color: rgba(148, 163, 184, 0.5);
+  }
+</style>
+
+{% endblock %}
