@@ -58,4 +58,12 @@ class PeliculaPersona(models.Model):
     rol = models.CharField(max_length=50, choices=LISTADO_ROLES, default='ACT')
 
 
+class Resena(models.Model):
+    pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='resenas')
+    usuario = models.CharField(max_length=100, default="Anónimo")
+    texto = models.TextField()
+    calificacion = models.IntegerField(default=5)
+    fecha = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"Resena de {self.usuario} para {self.pelicula.titulo}"
