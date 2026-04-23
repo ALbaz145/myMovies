@@ -13,5 +13,5 @@ def peliculas(request):
     return render(request, "peliculas.html", {"peliculas": items })
 
 def pelicula_detalle(request, pelicula_id):
-    pelicula = get_object_or_404(Pelicula, pk=pelicula_id)
+    pelicula = get_object_or_404(Pelicula, id=pelicula_id)
     return render(request, "pelicula_detalle.html", {"pelicula": pelicula})
