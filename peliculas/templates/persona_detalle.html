@@ -1,43 +1,67 @@
 {% extends "base.html" %}
 
+{% block title %}{{ persona.nombre }} - MyMovies{% endblock %}
+
 {% block content %}
-<section class="page">
-  <header class="page-header">
-    <h1>{{ persona.nombre }}</h1>
-    <p>
-      {{ persona.fecha_nacimiento }} · {{ persona.pais }}
-    </p>
-  </header>
+<div class="container mx-auto px-6 py-12">
+    <div class="max-w-5xl mx-auto">
+        <div class="flex flex-col md:flex-row items-center gap-10 mb-16 border-b border-slate-800 pb-12">
+            <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-cyan-500/20 shadow-[0_0_50px_rgba(6,182,212,0.1)] bg-slate-900 shrink-0">
+                {% if persona.imagen %}
+                    <img src="{{ persona.imagen.url }}" alt="{{ persona.nombre }}" class="w-full h-full object-cover">
+                {% else %}
+                    <div class="w-full h-full flex items-center justify-center text-slate-700">Sin foto</div>
+                {% endif %}
+            </div>
+            
+            <div class="text-center md:text-left">
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 tracking-tighter">{{ persona.nombre }}</h1>
+                <div class="flex flex-wrap justify-center md:justify-start gap-6 text-slate-400 text-lg">
+                    <span class="flex items-center gap-2">📍 {{ persona.pais }}</span>
+                    {% if persona.fecha_nacimiento %}
+                    <span class="flex items-center gap-2">📅 {{ persona.fecha_nacimiento|date:"d M, Y" }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
-  <div class="card" style="padding: 0; overflow: hidden;">
-    {% if persona.imagen %}
-      <img class="card-img" src="{{ persona.imagen.url }}" alt="{{ persona.nombre }}">
-    {% else %}
-      <div class="card-img--placeholder">Sin imagen</div>
-    {% endif %}
+        <h3 class="text-2xl font-bold mb-8 flex items-center gap-3">
+            <span class="w-8 h-[2px] bg-cyan-500"></span>
+            Participaciones en Cine
+        </h3>
 
-    <div class="card-body">
-      <h2 class="card-title">Participaciones</h2>
-
-      {% if participaciones %}
-        <ul style="margin: 10px 0 0 18px; padding: 0;">
-          {% for pp in participaciones %}
-            <li style="margin: 6px 0;">
-              <a href="{% url 'pelicula_detalle' pp.pelicula.id %}" style="color: var(--accent); text-decoration: none;">
-                {{ pp.pelicula.titulo }}
-              </a>
-              <span style="color: var(--muted);">· {{ pp.get_rol_display }}</span>
-            </li>
-          {% endfor %}
-        </ul>
-      {% else %}
-        <p class="card-text">No hay películas asociadas a esta persona.</p>
-      {% endif %}
-
-      <p style="margin-top: 14px;">
-        <a class="btn" href="{% url 'peliculas' %}">Volver a películas</a>
-      </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {% for pp in participaciones %}
+            <div class="group relative p-6 rounded-2xl bg-slate-900/40 border border-slate-800 hover:bg-slate-800/40 transition-all">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h4 class="text-xl font-bold text-white mb-1">
+                            <a href="{% url 'pelicula_detalle' pp.pelicula.id %}" class="hover:text-cyan-400 transition">
+                                {{ pp.pelicula.titulo }}
+                            </a>
+                        </h4>
+                        <p class="text-cyan-500 font-medium text-sm uppercase tracking-widest">{{ pp.get_rol_display }}</p>
+                    </div>
+                    <span class="text-slate-600 font-serif italic text-2xl group-hover:text-slate-400 transition">
+                        {{ pp.pelicula.fecha_lanzamiento|date:"Y" }}
+                    </span>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'pelicula_detalle' pp.pelicula.id %}" class="text-xs text-slate-500 hover:text-white underline underline-offset-4">
+                        Ver ficha de la película
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-slate-600 italic">No se han registrado películas para esta persona aún.</p>
+            {% endfor %}
+        </div>
+        
+        <div class="mt-16 text-center">
+            <a href="{% url 'peliculas' %}" class="px-10 py-4 rounded-full border border-slate-800 text-slate-400 hover:bg-white hover:text-black transition-all font-bold">
+                Volver al catálogo completo
+            </a>
+        </div>
     </div>
-  </div>
-</section>
+</div>
 {% endblock %}
