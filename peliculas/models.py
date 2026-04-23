@@ -2,6 +2,9 @@ from django.db import models
 
 class Estudio(models.Model):
     nombre = models.CharField(max_length=255, unique=True)
+    
+    def __str__(self):
+        return self.nombre
 
 class Genero(models.Model):
     LISTADO_GENEROS = [
@@ -18,6 +21,10 @@ class Genero(models.Model):
         ('DEF', 'Default'),
     ]
     nombre = models.CharField(max_length=3, choices=LISTADO_GENEROS, default='DEF')
+    
+    def __str__(self):
+            return self.nombre
+
 
 class Pelicula(models.Model):
     titulo = models.CharField(max_length=255)
@@ -27,8 +34,11 @@ class Pelicula(models.Model):
     estudio = models.ForeignKey(Estudio, on_delete=models.PROTECT)
     duracion = models.CharField(max_length=255)
     generos = models.ManyToManyField(Genero)
-    imagen = models.ImageField(upload_to='peliculas/', null=True, blank=True)
+    imagen = models.ImageField(upload_to='images/', null=True, blank=True)
     gross = models.CharField(max_length=255)
+    
+    def __str__(self):
+            return self.titulo
 
 class Usuario(models.Model):
     nombre_usuario = models.CharField(max_length=255, unique=True)
@@ -44,7 +54,10 @@ class Persona(models.Model):
     nombre = models.CharField(max_length=255)
     fecha_nacimiento = models.DateField()
     pais = models.CharField(max_length=255)
-    imagen = models.ImageField(upload_to='peliculas/images', null=True, blank=True)
+    imagen = models.ImageField(upload_to='images/', null=True, blank=True)
+
+    def __str__(self):
+        return self.nombre
 
 class PeliculaPersona(models.Model):
     LISTADO_ROLES = [
