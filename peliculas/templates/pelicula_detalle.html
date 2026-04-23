@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page">
+  <header class="page-header">
+    <h1>{{ pelicula.titulo }}</h1>
+    <p>{{ pelicula.fecha_lanzamiento }} · {{ pelicula.pais_origen }} · {{ pelicula.duracion }}</p>
+  </header>
+
+  <div class="card">
+    {% if pelicula.imagen %}
+  <img class="card-img" src="{{ pelicula.imagen.url }}" alt="{{ pelicula.titulo }}">
+{% else %}
+  <div class="card-img--placeholder">Sin imagen</div>
+{% endif %}
+
+    <p style="margin-top: 12px; color: var(--muted);">
+      Estudio: {{ pelicula.estudio.nombre }}
+    </p>
+
+    <p style="margin-top: 12px;">
+      {{ pelicula.descripcion }}
+    </p>
+  </div>
+
+    <h2 style="margin-top: 18px;">Personas</h2>
+
+{% if participaciones %}
+  <ul style="margin: 10px 0 0 18px; padding: 0;">
+    {% for pp in participaciones %}
+      <li style="margin: 6px 0;">
+        <a href="{% url 'persona_detalle' pp.persona.id %}" style="color: var(--accent); text-decoration: none;">
+          {{ pp.persona.nombre }}
+        </a>
+        <span style="color: var(--muted);">· {{ pp.get_rol_display }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p style="color: var(--muted);">No hay personas asociadas a esta película.</p>
+{% endif %}
+
+  <p style="margin-top: 14px;">
+    <a class="btn" href="{% url 'peliculas' %}">Volver</a>
+  </p>
+</section>
+{% endblock %}

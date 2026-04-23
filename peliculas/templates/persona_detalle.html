@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page">
+  <header class="page-header">
+    <h1>{{ persona.nombre }}</h1>
+    <p>
+      {{ persona.fecha_nacimiento }} · {{ persona.pais }}
+    </p>
+  </header>
+
+  <div class="card" style="padding: 0; overflow: hidden;">
+    {% if persona.imagen %}
+      <img class="card-img" src="{{ persona.imagen.url }}" alt="{{ persona.nombre }}">
+    {% else %}
+      <div class="card-img--placeholder">Sin imagen</div>
+    {% endif %}
+
+    <div class="card-body">
+      <h2 class="card-title">Participaciones</h2>
+
+      {% if participaciones %}
+        <ul style="margin: 10px 0 0 18px; padding: 0;">
+          {% for pp in participaciones %}
+            <li style="margin: 6px 0;">
+              <a href="{% url 'pelicula_detalle' pp.pelicula.id %}" style="color: var(--accent); text-decoration: none;">
+                {{ pp.pelicula.titulo }}
+              </a>
+              <span style="color: var(--muted);">· {{ pp.get_rol_display }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="card-text">No hay películas asociadas a esta persona.</p>
+      {% endif %}
+
+      <p style="margin-top: 14px;">
+        <a class="btn" href="{% url 'peliculas' %}">Volver a películas</a>
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}
