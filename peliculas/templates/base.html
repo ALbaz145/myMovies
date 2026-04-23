@@ -83,6 +83,7 @@
       <nav class="flex items-center gap-8 font-semibold uppercase text-xs tracking-widest">
         <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active text-neon{% endif %}">Inicio</a>
         <a href="{% url 'peliculas' %}" class="nav-link {% if request.resolver_match.url_name == 'peliculas' %}active text-neon{% endif %}">Películas</a>
+        <a href="{% url 'login' %}" class="nav-link {% if request.resolver_match.url_name == 'login' %}active text-neon{% endif %}">Iniciar Sesión</a>
         <button class="text-lg hover:text-neon transition">🔍</button>
       </nav>
     </div>
