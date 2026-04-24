@@ -32,7 +32,7 @@
                 <span class="text-slate-700">|</span>
                 <span>{{ pelicula.pais_origen }}</span>
                 <span class="text-slate-700">|</span>
-                <span>{{ pelicula.duracion }} min</span>
+                <span>{{ pelicula.duracion|cut:" min" }} min</span>
                 <span class="text-slate-700">|</span>
                 <span class="text-yellow-400">★ {{ pelicula.calificacion|default:"8.5" }}</span>
             </div>
