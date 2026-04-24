@@ -7,7 +7,6 @@
   <title>{% block title %}MyMovies{% endblock %}</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <link rel="stylesheet" href="{% static 'peliculas/styles.css' %}">
 
   <style>
@@ -56,19 +55,9 @@
       box-shadow: 0 0 10px #00f2ff;
     }
 
-    /* Botón de Neón */
-    .btn-neon {
-      background-color: #00f2ff;
-      color: #020617;
-      font-weight: bold;
-      border-radius: 9999px;
-      padding: 0.75rem 1.5rem;
-      transition: all 0.3s ease;
-    }
-
-    .btn-neon:hover {
-      box-shadow: 0 0 20px rgba(0, 242, 255, 0.6);
-      transform: translateY(-2px);
+    /* Buscador animado */
+    #input-global {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
   </style>
 </head>
@@ -76,25 +65,40 @@
 <body>
   <header class="navbar">
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+      
       <a class="text-2xl font-bold tracking-tighter flex items-center gap-2" href="{% url 'home' %}">
-        <span class="text-neon"></span> MyMovies
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-neon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+        </svg>
+        <span>ProMovies</span>
       </a>
 
       <nav class="flex items-center gap-8 font-semibold uppercase text-xs tracking-widest">
         <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active text-neon{% endif %}">Inicio</a>
         <a href="{% url 'peliculas' %}" class="nav-link {% if request.resolver_match.url_name == 'peliculas' %}active text-neon{% endif %}">Películas</a>
+        
         {% if user.is_authenticated %}
-        <a> User: {{ user.get_username }} </a> 
-        <form method="post" action="{% url 'logout' %}">
+          <span class="text-slate-400 normal-case tracking-normal">Hola, {{ user.username }}</span>
+          <form method="post" action="{% url 'logout' %}" class="inline">
             {% csrf_token %}
-            <button type="submit" class="nav-link cursor-pointer bg-transparent border-0 p-0">
-            CERRAR SESIÓN
+            <button type="submit" class="nav-link cursor-pointer bg-transparent border-0 p-0 uppercase">
+              CERRAR SESIÓN
             </button>
-        </form>
+          </form>
         {% else %}
-        <a href="{% url 'login' %}" class="nav-link {% if request.resolver_match.url_name == 'login' %}active text-neon{% endif %}">Iniciar Sesión</a>
+          <a href="{% url 'login' %}" class="nav-link {% if request.resolver_match.url_name == 'login' %}active text-neon{% endif %}">Iniciar Sesión</a>
         {% endif %}
-        <button class="text-lg hover:text-neon transition">🔍</button>
+
+        <div class="flex items-center bg-slate-900/50 rounded-full px-2 py-1 border border-transparent focus-within:border-cyan-500/50 transition-all">
+          <input type="text" id="input-global" 
+                 class="w-0 overflow-hidden bg-transparent border-none text-white text-xs focus:outline-none placeholder-slate-500" 
+                 placeholder="BUSCAR PELÍCULA...">
+          <button id="btn-toggle-search" class="text-slate-400 hover:text-neon transition-colors p-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
       </nav>
     </div>
   </header>
@@ -112,8 +116,36 @@
 
   <footer class="mt-20 py-10 border-t border-slate-900 text-center text-slate-500 text-sm">
     <div class="container mx-auto px-6">
-      <p>MyMovies - Programación Web &copy; 2026</p>
+      <p>ProMovies - Programación Web &copy; Periodo Enero-Agosto 2026</p>
     </div>
   </footer>
+
+  <script>
+    const btnSearch = document.getElementById('btn-toggle-search');
+    const inputSearch = document.getElementById('input-global');
+
+    btnSearch.addEventListener('click', () => {
+      if (inputSearch.classList.contains('w-0')) {
+        inputSearch.classList.replace('w-0', 'w-40');
+        inputSearch.classList.add('ml-2', 'mr-1');
+        inputSearch.focus();
+      } else {
+        // Si ya tiene texto y le dan clic, redirige a la página de películas con la búsqueda
+        if (inputSearch.value.trim() !== "") {
+            window.location.href = "{% url 'peliculas' %}?q=" + inputSearch.value;
+        } else {
+            inputSearch.classList.replace('w-40', 'w-0');
+            inputSearch.classList.remove('ml-2', 'mr-1');
+        }
+      }
+    });
+
+    // Detectar "Enter" en el buscador del Nav
+    inputSearch.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && inputSearch.value.trim() !== "") {
+        window.location.href = "{% url 'peliculas' %}?q=" + inputSearch.value;
+      }
+    });
+  </script>
 </body>
 </html>

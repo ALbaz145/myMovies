@@ -25,7 +25,14 @@ def home(request):
     })
 
 def peliculas(request):
-    items = Pelicula.objects.all().order_by('-id')
+    query = request.GET.get('q', '') # Captura lo que escribes en la lupa
+    if query:
+        items = Pelicula.objects.filter(
+            Q(titulo__icontains=query) | 
+            Q(sinopsis__icontains=query)
+        ).distinct().order_by('-id')
+    else:
+     items = Pelicula.objects.all().order_by('-id')
     return render(request, "peliculas.html", {"peliculas": items})
 
 def pelicula_detalle(request, pelicula_id):
