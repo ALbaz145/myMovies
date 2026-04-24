@@ -1,3 +1,5 @@
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Pelicula, Persona, PeliculaPersona, Resena
 from .forms import ResenaForm
@@ -54,3 +56,14 @@ def persona_detalle(request, persona_id):
     persona = get_object_or_404(Persona, id=persona_id)
     participaciones = PeliculaPersona.objects.select_related("pelicula").filter(persona=persona)
     return render(request, "persona_detalle.html", {"persona": persona, "participaciones": participaciones})
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})
