@@ -78,6 +78,9 @@ class PeliculaPersona(models.Model):
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE)
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
     rol = models.CharField(max_length=50, choices=LISTADO_ROLES, default='ACT')
+    
+    def __str__(self):
+        return f"{self.persona.nombre} como {self.get_rol_display()} en {self.pelicula.titulo}"
 
 
 class Resena(models.Model):
